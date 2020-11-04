@@ -45,11 +45,6 @@ namespace Trill.Services.Users.Core
     {
         public static IConveyBuilder AddCore(this IConveyBuilder builder)
         {
-            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
-            builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(LoggingEventHandlerDecorator<>));
-            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
-            builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
-            
             builder.Services
                 .AddScoped<LogContextMiddleware>()
                 .AddSingleton<IJwtProvider, JwtProvider>()
@@ -89,6 +84,11 @@ namespace Trill.Services.Users.Core
                 .AddWebApiSwaggerDocs();
 
             builder.Services.AddSingleton<ICorrelationIdFactory, CorrelationIdFactory>();
+            
+            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
+            builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(LoggingEventHandlerDecorator<>));
+            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
+            builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
 
             return builder;
         }
